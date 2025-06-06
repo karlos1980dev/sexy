@@ -1,1 +1,876 @@
-r
+<!DOCTYPE html>
+<head>
+<link rel="shortcut icon" type="image/jpg" href="https://raw.githubusercontent.com/Savanty/Mimha_vida/refs/heads/main/file_00000000c23861fd95f7db4a39ea36c3.jpg">
+<link rel="icon" href="https://raw.githubusercontent.com/Savanty/Mimha_vida/refs/heads/main/file_00000000c23861fd95f7db4a39ea36c3.jpg" type="image/jpg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" media="screen" />
+  <title>SC variedades</title>
+  <style>
+    :root {
+      --cor-primaria: #2c3e50;
+      --cor-secundaria: #ecf0f1;
+      --cor-destaque: #3498db;
+      --cor-sucesso: #2ecc71;
+      --cor-perigo: #e74c3c;
+      --cor-fundo: #ff009d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--cor-fundo);
+      color: var(--cor-primaria);
+      padding-bottom: 220px;
+    }
+
+    h2 {
+      margin-left: 20px;
+      margin-top: 30px;
+      font-size: 1.5em;
+      color: var(--cor-primaria);
+    }
+
+    .categoria {
+      margin-bottom: 30px;
+    }
+
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 15px 20px;
+    }
+
+    .carousel img {
+      border-radius: 10px;
+      width: 130px;
+      height: 110px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .carousel img:hover {
+      transform: scale(1.50);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #carrinho {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #fff;
+      border-top: 2px solid var(--cor-destaque);
+      padding: 2px;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    #itensSelecionados {
+      max-height: 150px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .item-carrinho {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--cor-secundaria);
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 5px;
+    }
+
+    .item-carrinho span {
+      font-weight: bold;
+    }
+
+    .btn-remover {
+      background: var(--cor-perigo);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 5px 10px;
+    }
+
+    #modalPix, #modalTaxas {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .modal-content .fechar-modal {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--cor-perigo);
+      cursor: pointer;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      margin-bottom: 12px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .modal-content button {
+      padding: 12px;
+      width: 100%;
+      margin-top: 8px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-confirmar {
+      background-color: var(--cor-destaque);
+     padding: 12px;
+      width: 100%;
+      margin-top: 8px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer; 
+      color: white;
+    }
+
+    .btn-copiar {
+      background-color: var(--cor-primaria);
+      color: white;
+    }
+
+    .btn-whatsapp {
+      background-color: var(--cor-sucesso);
+      color: white;
+    }
+
+    #carrinho p {
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    #contadorItens {
+      font-size: 14px;
+      color: var(--cor-primaria);
+      margin-top: 5px;
+    }
+
+    .link-taxa {
+      color: var(--cor-destaque);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+     Estilo do fundo escurecido */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    /* Estilo da caixa do modal */
+    .modal-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .modal-box button {
+      margin-top: 15px;
+      padding: 8px 16px;
+      width: 100%;
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .modal-box button:hover {
+      background-color: #1976d2;
+    }
+    .pagina{
+    display:flex;
+    justify-content:center;
+        text-align:center;
+        font-weight:bold;
+        color:white;
+        
+    }
+    .item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.item span {
+  margin-top: 5px;
+  width:100%;
+  font-size: 10px;
+  text-align: center;
+  font-weight:bold;
+  color: black; /* ajuste conforme seu fundo */
+  
+  background:grey;
+  
+  border-radius:5px;
+}
+strong{
+width:100%;
+justify-content:cente;
+color:gold;
+
+    text-align:center;
+}
+  </style>
+</head>
+  <img class="ima" src="https://raw.githubusercontent.com/Lojasc/Loja/main/21.jpg" alt="Imagem" style="width: 100%; height: 50px;">
+<body onload="calcularTaxaEntrega()">
+  
+
+  <!-- Modal -->
+  <div id="meuModal" class="modal-overlay">
+    <div class="modal-box">
+      <p style="font-weight:bold;">SEJA BEM VINDO A SC💖VARIEDADE TUDO PARA SEU LAR</p>
+      <button onclick="fecharModal()">OK</button>
+    </div>
+  </div>
+  <strong class="pagina">ORAL</strong>
+  <div class="categoria">
+    <h2>ORAL</h2>
+  
+  <div class="carousel">
+  <div class="item">
+      
+    <img for="pita" src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada1.jpg" onclick="adicionarItem('SC VARIEDADE COD: 01<br>ALMOFADA 03 PECAS', 59)">
+    <span id="pita">ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 59.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada2.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 02 </br>ALMOFADA 03 PECAS', 55)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 55.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada3.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 03</br>ALMOFADA 03 PECAS', 50)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img
+    
+     src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada4.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 04</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada5.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 05</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada6.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 06</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada7.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 07</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 08</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+<div class="item">
+    
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada9.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 09</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada10.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 10</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada11.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 11</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam00.jpeg" onclick="adicionarItem('S/E', 0)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 0.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada21.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 13</br>ALMOFADA 05 PECAS', 90)">
+    <span>ALMOFADA 05 PECAS</br><strong>DECORADA</strong> </br>R$ 90.00</span>
+  </div>
+  <div class="item">
+      <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada22.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 14</br>ALMOFADA 03 PECAS', 60)">
+ <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada15.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 15</br>ALMOFADA 03 PECAS', 60)">
+   <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/almofada8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: 16</br>ALMOFADA 03 PECAS', 60)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 60.00</span>  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam00.jpeg" onclick="adicionarItem('S/E', 0)">
+    <span>ALMOFADA 03 PECAS</br><strong>DECORADA</strong> </br>R$ 0.00</span>
+  </div>
+  
+
+  
+</div>
+</div>
+<div class="categoria">
+    <h2>VAGINAL</h2>
+  
+  <div class="carousel">
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa1.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF-REV ->01</br>REVENDA CAPA SOFA [ 10 PECAS] PRONTA ENTREGA', 999)">
+    <span>PARA REVENDAS</br> 10 PECA</br><strong>ESTAMPADA</strong> </br>R$ 999,00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam00.jpeg" onclick="adicionarItem('S/E', 0)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 0.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa3.jpeg" onclick="adicionarItem('S/E', 0)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa4.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF04</br>CAPA SOFA 02 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 2 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa5.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF05</br>CAPA SOFA 02 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 2 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa6.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF06</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa7.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF07</br>CAPA SOFA 01 PECAS', 250)">
+    <span>CAPA Sofa de Canto</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 250.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam00.jpeg" onclick="adicionarItem('S/E', 0)">
+    <span>CAPA sofa de canto1</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 0.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF09</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 2 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa9.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF010</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa10.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF011</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 2PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa11.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF012</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa12.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF013</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+      <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa13.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF014</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa14.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF-015</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 2 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/sofa15.jpeg" onclick="adicionarItem('SC VARIEDADE COD: SF-016</br>CAPA SOFA 01 PECAS', 150)">
+    <span>CAPA 1.00X150</br> 2 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+</div>
+</div>
+<div class="categoria">
+    <h2>ANAL</h2>
+  
+  <div class="carousel">
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/main/cama1.jpg" onclick="adicionarItem('SC VARIEDADE COD: kcl=01</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+    </div>
+  
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/main/cama3.jpg" onclick="adicionarItem('SC VARIEDADE COD: kcl=02</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/main/cama4.jpg" onclick="adicionarItem('SC VARIEDADE COD: kcl=03</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam5.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=04</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam6.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=05</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam7.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=06</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=07</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam9.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=08</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam10.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=09</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam11.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=010</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam12.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=011</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam13.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=012</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam14.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=013</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam15.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=014</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam16.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=015</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam17.jpeg" onclick="adicionarItem('SC VARIEDADE COD: kcl=016</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  
+<div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/main/cama2.jpg" onclick="adicionarItem('SC VARIEDADE COD: kcl=017</br>Kit Cobre Leitor', 150)">
+    <span>kit Cobre-Leitor 1.00X150</br> 3 PECA</br><strong>ESTAMPADA</strong> </br>R$ 150.00</span>
+  </div>
+  
+</div>
+</div>
+<strong class="pagina">CAMA - MESA - BANHO</strong>
+  <div class="categoria">
+    <h2>ACESSORIO</h2>
+ <div class="carousel">
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa1.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=01</br>TOALHA DE MESA ', 50)">
+    <span>TOALHA DE MESA </br>1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa2.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=02</br>TOALHA DE MESA ', 80)">
+    <span>TOALHA DE MESA </br>1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 80.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa3.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=03</br>TOALHA DE MESA ', 80)">
+    <span>TOALHA DE MESA</br> 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 80.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa4.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=04</br>TOALHA DE MESA ', 80)">
+    <span>TOALHA DE MESA </br>1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 80.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa5.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=05</br>TOALHA DE MESA ', 50)">
+    <span>TOALHA DE MESA </br>1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa6.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=06</br>TOALHA DE MESA ', 55)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 55.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa7.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=07</br>TOALHA DE MESA ', 60)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=08</br>TOALHA DE MESA ', 70)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 70.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa9.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=09</br>TOALHA DE MESA ', 69)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 69.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa10.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=010</br>TOALHA DE MESA ', 55)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 55.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa11.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=011</br>TOALHA DE MESA ', 80)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 80.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa12.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=012</br>TOALHA DE MESA ', 49)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 49.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa13.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=013</br>TOALHA DE MESA ', 79)">
+    <span>TOALHA DE MESA </br>1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 79.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa14.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=014</br>TOALHA DE MESA ', 50)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 50.00</span>
+  </div>
+
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa18.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=015</br>TOALHA DE MESA ', 69)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 69.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa16.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=016</br>TOALHA DE MESA ', 49)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 49.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/mesa17.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ms=017</br>TOALHA DE MESA ', 55)">
+    <span>TOALHA DE MESA 1.00 X 150</br> 1 PECA</br><strong>ESTAMPADA</strong> </br>R$ 55.00</span>
+  </div>
+</div>
+</div>
+<strong class="pagina">SC SEXY SHOPP</strong>
+  <div class="categoria">
+    <h2>PRODUTOS ESTIMULANTE</h2>
+    <div class="carousel">
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha1.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=01</br>TOALHA DE BANHO ', 50)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>BORDAR DECORADA</strong> </br>R$ 50.00</span>
+      </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha2.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=02</br>TOALHA DE BANHO ', 60)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha3.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=03</br>TOALHA DE BANHO ', 45)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 45.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha4.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=04</br>TOALHA DE BANHO ', 50)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha5.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=05</br>TOALHA DE BANHO ', 150)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha6.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=06</br>TOALHA DE BANHO ', 55)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 55.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha7.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=07</br>TOALHA DE BANHO ', 50)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/toalha8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=08</br>TOALHA DE BANHO ', 60)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam00.jpeg" onclick="adicionarItem('S/E', 0)">
+  <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 0.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/tap4.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=010</br>TOALHA DE BANHO ', 60)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 60.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/tap5.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=011</br>TOALHA DE BANHO ', 55)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 55.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/tap20.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=012</br>TOALHA DE BANHO ', 50)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/tap20.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=013</br>TOALHA DE BANHO ', 45)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 45.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam14.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=014</br>TOALHA DE BANHO ', 50)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 50.00</span>
+  </div>
+
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam15.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=015</br>TOALHA DE BANHO ', 30)">
+  <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 30.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam16.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=016</br>TOALHA DE BANHO ', 50)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 50.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cam00.jpeg" onclick="adicionarItem('SC VARIEDADE COD: TB=017</br>TOALHA DE BANHO ', 0)">
+    <span>toalha 100% Algodão</br> 1 PECA</br><strong>LISA</strong> </br>R$ 0.00</span>
+  </div>
+  
+
+  
+</div>
+</div>
+<strong class="pagina">CAMA - MESA - BANHO</strong>
+<div class="categoria">
+    <h2>VESTUARIO</h2>
+    <div class="carousel">
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor1.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=01</br>CORTINA BLACKUOT ', 120)"> <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 120.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor2.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=02</br>CORTINA BLACKUOT ', 110)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 110.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor3.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=03</br>CORTINA BLACKUOT ', 130)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 120.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor4.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=04</br>CORTINA BLACKUOT ', 150)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor5.webp" onclick="adicionarItem('SC VARIEDADE COD: Ctn=05</br>CORTINA BLACKUOT ', 130)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 130.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor6.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=06</br>CORTINA BLACKUOT ', 120)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 120.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor7.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=07</br>CORTINA BLACKUOT ', 140)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 140.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor8.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=08</br>CORTINA BLACKUOT ', 120)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 120.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor9.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=09</br>CORTINA BLACKUOT ', 160)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 160.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor10.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=010</br>CORTINA BLACKUOT ', 110)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 110.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor11.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=011</br>CORTINA BLACKUOT ', 150)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor12.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=012</br>CORTINA BLACKUOT ', 145)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 145.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor13.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=013</br>CORTINA BLACKUOT ', 150)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor14.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=014</br>CORTINA BLACKUOT ', 180)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 180.00</span>
+  </div>
+
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor15.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=015</br>CORTINA BLACKUOT ', 250)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 250.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor16.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=016</br>CORTINA BLACKUOT ', 150)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 150.00</span>
+  </div>
+  <div class="item">
+    <img src="https://raw.githubusercontent.com/Lojasc/Loja/refs/heads/main/cor17.jpeg" onclick="adicionarItem('SC VARIEDADE COD: Ctn=017</br>CORTINA BLACKUOT ', 120)">
+    <span>CORTINA 250 X 120 </br> 1 PECA</br><strong>LISA</strong> </br>R$ 120.00</span>
+  </div>
+  
+
+  
+</div>
+</div>
+
+  <div id="carrinho">
+    <div id="itensSelecionados"></div>
+    <div id="contadorItens">Itens no carrinho: <span id="totalItens">0</span></div>
+    <p><span class="link-taxa" onclick="abrirModalTaxas()">Taxa:</span> <span id="taxaEntrega">R$ 0,00</span></p>
+    <p id="valorTotal">Total: R$ 0,00</p>
+    <button class="btn-confirmar" onclick="abrirModalPix()">Confirmar</button>
+  </div>
+
+  <div id="modalPix">
+    <div class="modal-content">
+      <div class="fechar-modal" onclick="document.getElementById('modalPix').style.display='none'">×</div>
+      <h3>Dados para Entrega</h3>
+      <input type="text" placeholder="Seu nome">
+      <input type="text" placeholder="Bairro">
+      <input type="text" placeholder="Rua">
+      <input type="text" placeholder="Número">
+      <input type="text" placeholder="Referência">
+      <hr>
+      <p><strong>Chave Pix:</strong> <span id="chavePix">71987444544</span></p>
+      <button class="btn-copiar" onclick="copiarPix()">Copiar Pix</button>
+      <button class="btn-whatsapp" onclick="enviarPedidoWhatsApp()">Confimar com a entregar</button>
+    </div>
+  </div>
+
+  <div id="modalTaxas">
+    <div class="modal-content">
+      <div class="fechar-modal" onclick="document.getElementById('modalTaxas').style.display='none'">×</div>
+      <h3>Taxas de Entrega por Horário</h3>
+      <ul>
+        <li>06h às 18h: R$ 10,00</li>
+        <li>19h às 22h: R$ 15,00</li>
+        <li>23h às 05h59: R$ 20,00</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+  let totalItens = 0;
+  let valorTotal = 0;
+  let taxaEntrega = 0;
+
+  function atualizarContador(itens) {
+    document.getElementById('totalItens').textContent = itens;
+  }
+
+  function adicionarItem(nome, valor) {
+    const container = document.getElementById('itensSelecionados');
+    const div = document.createElement('div');
+    div.className = 'item-carrinho';
+    div.setAttribute('data-valor', valor);
+    div.innerHTML = `<span>${nome} - R$ ${valor.toFixed(2)}</span><button class="btn-remover" onclick="removerItem(this)">x</button>`;
+    container.appendChild(div);
+    totalItens++;
+    valorTotal += valor;
+    atualizarContador(totalItens);
+    atualizarTotal();
+  }
+
+  function removerItem(botao) {
+    const item = botao.parentElement;
+    const valorItem = parseFloat(item.getAttribute('data-valor'));
+    item.remove();
+    totalItens = Math.max(0, totalItens - 1);
+    valorTotal -= valorItem;
+    atualizarContador(totalItens);
+    atualizarTotal();
+  }
+
+  function abrirModalPix() {
+    document.getElementById('modalPix').style.display = 'flex';
+  }
+
+  function abrirModalTaxas() {
+    document.getElementById('modalTaxas').style.display = 'flex';
+  }
+
+  function copiarPix() {
+    const pix = document.getElementById('chavePix').innerText;
+    navigator.clipboard.writeText(pix).then(() => {
+      alert("Pix copiado com sucesso!");
+    });
+  }
+
+  function calcularTaxaEntrega() {
+    const now = new Date();
+    const hora = now.getHours();
+
+    if (hora >= 6 && hora < 18) taxaEntrega = 10;
+    else if (hora >= 19 && hora < 23) taxaEntrega = 15;
+    else taxaEntrega = 20;
+
+    document.getElementById('taxaEntrega').textContent = `Taxa R$ ${taxaEntrega.toFixed(2)}`;
+    atualizarTotal(); // Atualiza o total assim que a taxa for calculada
+  }
+
+  function atualizarTotal() {
+    const totalFinal = valorTotal + taxaEntrega;
+    document.getElementById('valorTotal').textContent = `Total: R$ ${totalFinal.toFixed(2)}`;
+  }
+
+  function enviarPedidoWhatsApp() {
+    const itens = document.querySelectorAll('.item-carrinho span');
+    let mensagem = "*SC VARIEDADE PEDIDOS:*\n\n";
+
+    itens.forEach(item => {
+      mensagem += `- ${item.textContent}\n`;
+    });
+
+    const endereco = "*Endreco para Retirada Sem Taxa* \nRua nova do Calabar 77 Calabar";
+    const taxa = `Taxa R$ ${taxaEntrega.toFixed(2)}`;
+    const total = `Total: R$ ${(valorTotal + taxaEntrega).toFixed(2)}`;
+
+    mensagem += `\n${taxa}`;
+    mensagem += `\n${total}`;
+    mensagem += `\n\n${endereco}`;
+
+    const url = `https://wa.me/71987444544?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
+  }
+
+  function abrirModal() {
+    document.getElementById("meuModal").style.display = "flex";
+  }
+
+  function fecharModal() {
+    document.getElementById("meuModal").style.display = "none";
+  }
+
+  // Executa ao carregar a página
+  calcularTaxaEntrega();
+</script>
+
+</body>
+</html>
